@@ -1,4 +1,4 @@
-# Project Management System Front End
+# Project Management System Frontend
 
 > A Vue.js project
 
