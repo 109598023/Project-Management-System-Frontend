@@ -9,16 +9,15 @@ const errorHandle = (status, msg) => {
       tip(msg)
       break
     case 401:
-      if (router.currentRoute === 'Login') {
+      if (router.currentRoute.name === 'Login') {
       } else {
-        store.dispatch('auth/setAuth', {
-          'token': '',
-          'isLogin': false
+        store.dispatch('setAuth', {
+          'accessToken': '',
+          'refreshToken': '',
+          'isLogin': ''
         })
         tip(msg)
-        setTimeout(() => {
-          toLogin()
-        }, 1000)
+        toLogin()
       }
       break
     case 403:
@@ -39,8 +38,6 @@ var instance = axios.create({
 instance.interceptors.request.use((config) => {
   const token = store.state.auth.token
   token && (config.headers.Authorization = 'Bearer ' + token)
-  token && (config.headers.RRRR = 'Bearer R ' + token)
-  console.log(config)
   return config
 }, (error) => {
   return Promise.reject(error)
@@ -63,11 +60,12 @@ instance.interceptors.response.use((response) => {
   }
 })
 
-export default function (method, url, data = null) {
+export default function (method, url, data = null, em) {
   method = method.toLowerCase()
   if (method === 'post') {
-    console.log(data)
-    return instance.post(url, data)
+    return instance.post(url, data).catch((e) => {
+      console.log(e.message)
+    })
   } else if (method === 'get') {
     return instance.get(url, {params: data})
   } else if (method === 'delete') {

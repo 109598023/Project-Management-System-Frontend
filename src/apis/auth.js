@@ -1,15 +1,14 @@
 import req from './https'
 
 const auth = {
-
   signUp (params) {
-    return req('post', '/auth/signup', params)
+    return req('post', '/user/signup', params)
   },
   login (params) {
-    return req('post', '/auth', params)
+    return req('post', '/user/login', params)
   },
-  async validateToken (params) {
-    return req('post', '/auth/parse', params)
+  refresh (params) {
+    return req('post', '/auth/refresh', params)
   }
 }
 

@@ -2,10 +2,28 @@
   <header class="header">
     <b-navbar class="navbar" toggleable="lg" type="dark" variant="dark" fixed="top">
       <b-navbar-brand class="mb-0 h3">PMS</b-navbar-brand>
+      <b-navbar-toggle target="nav-collpase" v-if="isLogin"></b-navbar-toggle>
+      <b-collapse id="nav-collpase" is-nav v-if="isLogin">
+        <b-navbar-nav class="ml-auto" right>
+          <b-nav-item href="/project">Project</b-nav-item>
+          <b-nav-item href="/team">Team</b-nav-item>
+          <b-nav-item href="/profile">Profile</b-nav-item>
+          <b-nav-item href="/logout">Logout</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
     </b-navbar>
   </header>
 </template>
-<script></script>
+<script>
+export default {
+  name: 'Navbar',
+  computed: {
+    isLogin () {
+      return this.$store.state.auth.accessToken
+    }
+  }
+}
+</script>
 <style scoped>
 .h3 {
   font-size: 1.75rem;

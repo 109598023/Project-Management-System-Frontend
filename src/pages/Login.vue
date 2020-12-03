@@ -1,24 +1,28 @@
 <template>
-  <form @submit.prevent='handleSubmit'>
-    <h3>Login</h3>
-    <div class='form-group'>
-      <label>username</label>
-      <input type='text' class='form-control' v-model='username' placeholder='username'/>
-    </div>
-    <div class='form-group'>
-      <label>username</label>
-      <input type='password' class='form-control' v-model='password' placeholder='password'/>
-    </div>
-    <button class='btn btn-primary btn-block'>Login</button>
-  </form>
+  <b-container>
+    <b-row>
+      <b-col md=6  class="mx-auto">
+        <b-form @submit.prevent="handleSubmit">
+          <h1>Login</h1>
+          <b-form-group id="fieldset-username" label-cols="4" label-cols-lg="2" label="Username:" label-for="username">
+            <b-form-input id="username" v-model="username" placeholder="username"></b-form-input>
+          </b-form-group>
+          <b-form-group id="fieldset-password" label-cols="4" label-cols-lg="2" label="Password:" label-for="password">
+            <b-form-input id="password" v-model="password" placeholder="password"></b-form-input>
+          </b-form-group>
+          <b-button variant="primary" block type="submit">Login</b-button>
+        </b-form>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script>
 export default {
   name: 'Login',
   data () {
     return {
-      username: '',
-      password: ''
+      username: 'test',
+      password: 'test'
     }
   },
   methods: {
@@ -27,14 +31,18 @@ export default {
         username: this.username,
         password: this.password
       }).then((response) => {
-        let res = response.data
-        let token = res.token
-        console.log(this.$store)
+        const res = response.data
+        const accessToken = res.accessToken
+        const refreshToken = res.refreshToken
+        console.log(this.$router)
         this.$store.dispatch('setAuth', {
-          'token': token,
+          'accessToken': accessToken,
+          'refreshToken': refreshToken,
           'isLogin': true
         })
-        console.log(response)
+        this.$router.push('/')
+      }).catch((e) => {
+        console.log(e)
       })
     }
   }
