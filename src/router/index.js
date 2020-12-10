@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import Login from '@/pages/Login'
-import page1 from '@/pages/page1'
+import Login from '@/components/Login'
+import Signup from '@/components/Signup'
 import store from '../store'
 import api from '../apis'
 
@@ -23,10 +23,10 @@ const rotuer = new Router({
       meta: { requiresAuth: false }
     },
     {
-      path: '/test/page1',
-      name: 'page1',
-      component: page1,
-      meta: { requiresAuth: true }
+      path: '/Signup',
+      name: 'Signup',
+      component: Signup,
+      meta: { requiresAuth: false }
     },
     {
       path: '*',

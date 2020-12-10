@@ -16,7 +16,6 @@ const errorHandle = (status, msg) => {
           'refreshToken': '',
           'isLogin': ''
         })
-        tip(msg)
         toLogin()
       }
       break

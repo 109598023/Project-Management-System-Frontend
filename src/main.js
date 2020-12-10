@@ -4,10 +4,13 @@ import 'mutationobserver-shim'
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import './plugins/bootstrap-vue'
+import FontAwesomeIcon from './plugins/fortawesome'
 import App from './App'
 import router from './router'
 import store from './store/index'
 import api from './apis'
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 
