@@ -21,8 +21,8 @@ export default {
   name: 'Login',
   data () {
     return {
-      username: 'test',
-      password: 'test'
+      username: '',
+      password: ''
     }
   },
   methods: {
@@ -31,18 +31,18 @@ export default {
         username: this.username,
         password: this.password
       }).then((response) => {
-        const res = response.data
-        const accessToken = res.accessToken
-        const refreshToken = res.refreshToken
-        console.log(this.$router)
-        this.$store.dispatch('setAuth', {
-          'accessToken': accessToken,
-          'refreshToken': refreshToken,
-          'isLogin': true
-        })
-        this.$router.push('/')
+        if (response.data !== undefined) {
+          const res = response.data
+          const accessToken = res.accessToken
+          const refreshToken = res.refreshToken
+          this.$store.dispatch('setAuth', {
+            'accessToken': accessToken,
+            'refreshToken': refreshToken,
+            'isLogin': true
+          })
+          this.$router.push('/')
+        }
       }).catch((e) => {
-        console.log(e)
       })
     }
   }
