@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from '../router'
 import store from '../store'
-import { tip, toLogin, to403Page } from './utils'
+import { tip, toLogin } from './utils'
 
 const errorHandle = (status, msg) => {
   switch (status) {
@@ -20,7 +20,6 @@ const errorHandle = (status, msg) => {
       }
       break
     case 403:
-      to403Page()
       break
     case 404:
       tip(msg)
@@ -35,7 +34,7 @@ var instance = axios.create({
 })
 
 instance.interceptors.request.use((config) => {
-  const token = store.state.auth.token
+  const token = store.state.auth.accessToken
   token && (config.headers.Authorization = 'Bearer ' + token)
   return config
 }, (error) => {

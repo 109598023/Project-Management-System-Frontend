@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Signup from '@/components/Signup'
+import Contributors from '@/components/Contributors'
 import store from '../store'
 import api from '../apis'
 
@@ -29,6 +30,12 @@ const rotuer = new Router({
       meta: { requiresAuth: false }
     },
     {
+      path: '/contributors',
+      name: 'Contributors',
+      component: Contributors,
+      meta: { requiresAuth: true }
+    },
+    {
       path: '*',
       redirect: '/login'
     }
@@ -36,7 +43,6 @@ const rotuer = new Router({
 })
 
 rotuer.beforeEach((to, from, next) => {
-  console.log(api)
   if (to.matched.some(record => { return record.meta.requiresAuth })) {
     api.auth.refresh({
       'refreshToken': store.state.auth.refreshToken

@@ -1,7 +1,8 @@
 export default {
   namespace: true,
   state: {
-    token: '',
+    accessToken: '',
+    refreshToken: '',
     isLogin: false
   },
   mutations: {

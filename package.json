@@ -22,8 +22,10 @@
     "axios": "^0.21.0",
     "bootstrap-icons": "^1.1.0",
     "bootstrap-vue": "^2.17.3",
+    "echarts": "^5.0.0",
     "element-ui": "^2.14.1",
     "vue": "^2.5.2",
+    "vue-echarts": "^5.0.0-beta.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.6.0",
     "vuex-persistedstate": "^4.0.0-beta.1"
