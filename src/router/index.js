@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Signup from '@/components/Signup'
 import Contributors from '@/components/Contributors'
+import ProjectView from '@/components/ProjectViewMenu'
 import store from '../store'
 import api from '../apis'
 
@@ -30,10 +31,15 @@ const rotuer = new Router({
       meta: { requiresAuth: false }
     },
     {
-      path: '/contributors',
-      name: 'Contributors',
-      component: Contributors,
-      meta: { requiresAuth: true }
+      path: '/project_view',
+      name: 'ProjectView',
+      component: ProjectView,
+      meta: { requiresAuth: true },
+      children: [{
+        path: '/contributors',
+        name: 'Contributors',
+        component: Contributors
+      }]
     },
     {
       path: '*',
