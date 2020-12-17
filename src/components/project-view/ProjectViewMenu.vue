@@ -22,7 +22,7 @@ import { SidebarMenu } from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 export default {
-  name: 'ProjectView2',
+  name: 'ProjectView',
   components: {
     SidebarMenu
   },
@@ -44,10 +44,11 @@ export default {
           },
           child: [
             {
-              href: '/contributors',
+              href: `/${this.$route.params.id}/contributors_total`,
               title: 'page'
             },
             {
+              href: `/${this.$route.params.id}/contributors`,
               title: 'page2'
             },
             {
@@ -75,6 +76,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.$route.params)
     this.onResize()
     window.addEventListener('resize', this.onResize)
   },

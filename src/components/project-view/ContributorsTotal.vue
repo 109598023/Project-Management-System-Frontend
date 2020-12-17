@@ -32,6 +32,7 @@ import 'echarts/lib/chart/line'
 import 'echarts/lib/component/dataZoom'
 
 export default {
+  name: 'ContributorsTotal',
   components: {
     'v-chart': ECharts
   },
@@ -77,7 +78,7 @@ export default {
     }
   },
   methods: {
-    async getContributorsData () {
+    async getContributorsData (id) {
       this.$api.view.contributors().then((r) => {
         const data = r.data.total
         this.data = data
@@ -116,6 +117,7 @@ export default {
     }
   },
   mounted: function () {
+    console.log(this.$route.params)
     this.$refs.chart.showLoading()
     this.getContributorsData()
   },

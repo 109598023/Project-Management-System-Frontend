@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import Login from '@/components/Login'
-import Signup from '@/components/Signup'
-import Contributors from '@/components/Contributors'
-import ProjectView from '@/components/ProjectViewMenu'
 import store from '../store'
 import api from '../apis'
 
@@ -15,31 +10,45 @@ const rotuer = new Router({
     {
       path: '/',
       name: 'Home',
-      component: HelloWorld,
+      component: () => import('@/components/HelloWorld'),
       meta: { requiresAuth: true }
     },
     {
       path: '/login',
       name: 'Login',
-      component: Login,
+      component: () => import('@/components/Login'),
       meta: { requiresAuth: false }
     },
     {
       path: '/Signup',
       name: 'Signup',
-      component: Signup,
+      component: () => import('@/components/Signup'),
       meta: { requiresAuth: false }
     },
     {
-      path: '/project_view',
+      path: '',
       name: 'ProjectView',
-      component: ProjectView,
-      meta: { requiresAuth: true },
+      component: () => import('@/components/project-view/ProjectViewMenu'),
+      meta: { requiresAuth: true, requiresCheckPermission: true },
       children: [{
-        path: '/contributors',
+        path: '/:id/contributors_total',
+        name: 'ContributorsTotal',
+        component: () => import('@/components/project-view/ContributorsTotal')
+      }, {
+        path: '/:id/contributors',
         name: 'Contributors',
-        component: Contributors
+        component: () => import('@/components/project-view/Contributors')
+      }, {
+        path: '/:id/contributors_test',
+        name: 'ContributorsTest',
+        component: () => import('@/components/project-view/ContributorsTest')
       }]
+    },
+    {
+      path: '/projects',
+      name: 'Projects',
+      component: () => import('@/components/project-view/Projects'),
+      meta: { requiresAuth: true }
     },
     {
       path: '*',
@@ -50,6 +59,8 @@ const rotuer = new Router({
 
 rotuer.beforeEach((to, from, next) => {
   if (to.matched.some(record => { return record.meta.requiresAuth })) {
+    if (to.matched.some(record => { return record.meta.requiresCheckPermission })) {
+    }
     api.auth.refresh({
       'refreshToken': store.state.auth.refreshToken
     }).then((response) => {
