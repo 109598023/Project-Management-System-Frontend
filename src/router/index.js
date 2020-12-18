@@ -39,6 +39,10 @@ const rotuer = new Router({
         name: 'EditProfile',
         component: () => import('@/components/project-view/EditProfile')
       }, {
+        path: '/project/:id/members',
+        name: 'Members',
+        component: () => import('@/components/project-view/Members')
+      }, {
         path: '/project/:id/contributors_total',
         name: 'ContributorsTotal',
         component: () => import('@/components/project-view/ContributorsTotal')

@@ -55,6 +55,16 @@ export default {
           href: `/project/${this.$route.params.id}/edit_profile`
         },
         {
+          title: 'Members',
+          icon: {
+            element: 'font-awesome-icon',
+            attributes: {
+              icon: ['fas', 'users']
+            }
+          },
+          href: `/project/${this.$route.params.id}/members`
+        },
+        {
           header: true,
           title: 'Project Repository',
           hiddenOnCollapse: true
