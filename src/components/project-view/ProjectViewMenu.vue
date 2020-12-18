@@ -31,6 +31,31 @@ export default {
       menu: [
         {
           header: true,
+          title: 'Project',
+          hiddenOnCollapse: true
+        },
+        {
+          title: 'Profile',
+          icon: {
+            element: 'font-awesome-icon',
+            attributes: {
+              icon: ['fas', 'file-alt']
+            }
+          },
+          href: `/project/${this.$route.params.id}/profile`
+        },
+        {
+          title: 'Edit Profile',
+          icon: {
+            element: 'font-awesome-icon',
+            attributes: {
+              icon: ['fas', 'edit']
+            }
+          },
+          href: `/project/${this.$route.params.id}/edit_profile`
+        },
+        {
+          header: true,
           title: 'Project Repository',
           hiddenOnCollapse: true
         },
@@ -44,11 +69,11 @@ export default {
           },
           child: [
             {
-              href: `/${this.$route.params.id}/contributors_total`,
+              href: `/project/${this.$route.params.id}/contributors_total`,
               title: 'page'
             },
             {
-              href: `/${this.$route.params.id}/contributors`,
+              href: `/project/${this.$route.params.id}/contributors`,
               title: 'page2'
             },
             {
@@ -102,7 +127,7 @@ export default {
         this.$refs['sidebar-menu'].$el.style['flex'] = '0 0 50px'
         this.$refs['page'].className = 'page2'
       } else {
-        this.$refs['sidebar-menu'].$el.style['flex'] = '0 0 350px'
+        this.$refs['sidebar-menu'].$el.style['flex'] = '0 0 250px'
         this.$refs['page'].className = 'page'
       }
     }
@@ -111,9 +136,7 @@ export default {
 </script>
 <style scoped>
 .v-sidebar-menu {
-  /* top: 4rem;
-  height: calc(100vh - 4rem); */
-  flex: 0 0 350px;
+  flex: 0 0 250px;
   position: relative;
 }
 .project-view-container {
@@ -122,7 +145,7 @@ export default {
   position: relative;
 }
 .page {
-  width: calc(100vw - 350px);
+  width: calc(100vw - 250px);
 }
 .page2 {
   width: calc(100vw - 50px);

@@ -4,7 +4,7 @@
     <b-navbar-toggle target="nav-collpase" v-if="isLogin"></b-navbar-toggle>
     <b-collapse id="nav-collpase" is-nav>
       <b-navbar-nav class="ml-auto" right v-if="isLogin">
-        <b-nav-item href="/projects">Project</b-nav-item>
+        <b-nav-item href="/project">Project</b-nav-item>
         <b-nav-item href="/team">Team</b-nav-item>
         <b-nav-item href="/profile">Profile</b-nav-item>
         <b-nav-item href="/logout" @click.prevent="logout">
@@ -29,8 +29,8 @@ export default {
     logout () {
       this.$store.dispatch('setAuth', {
         'accessToken': '',
-        'refreshToken': '',
-        'isLogin': false
+        'isLogin': false,
+        'username': ''
       })
       this.$router.push('/login')
     }

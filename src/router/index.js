@@ -31,23 +31,31 @@ const rotuer = new Router({
       component: () => import('@/components/project-view/ProjectViewMenu'),
       meta: { requiresAuth: true, requiresCheckPermission: true },
       children: [{
-        path: '/:id/contributors_total',
+        path: '/project/:id/profile',
+        name: 'Profile',
+        component: () => import('@/components/project-view/Profile')
+      }, {
+        path: '/project/:id/edit_profile',
+        name: 'EditProfile',
+        component: () => import('@/components/project-view/EditProfile')
+      }, {
+        path: '/project/:id/contributors_total',
         name: 'ContributorsTotal',
         component: () => import('@/components/project-view/ContributorsTotal')
       }, {
-        path: '/:id/contributors',
+        path: '/project/:id/contributors',
         name: 'Contributors',
         component: () => import('@/components/project-view/Contributors')
       }, {
-        path: '/:id/contributors_test',
+        path: '/project/:id/contributors_test',
         name: 'ContributorsTest',
         component: () => import('@/components/project-view/ContributorsTest')
       }]
     },
     {
-      path: '/projects',
-      name: 'Projects',
-      component: () => import('@/components/project-view/Projects'),
+      path: '/project',
+      name: 'Project',
+      component: () => import('@/components/project-view/Project'),
       meta: { requiresAuth: true }
     },
     {
@@ -64,6 +72,12 @@ rotuer.beforeEach((to, from, next) => {
     api.auth.refresh({
       'refreshToken': store.state.auth.refreshToken
     }).then((response) => {
+      store.dispatch('setAuth', {
+        'accessToken': response.data.accessToken,
+        'refreshToken': response.data.refreshToken,
+        'isLogin': true,
+        'username': store.state.auth.username
+      })
       next()
     })
   } else {

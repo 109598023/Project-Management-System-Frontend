@@ -12,6 +12,9 @@ const view = {
   },
   queryProject (params) {
     return req('post', '/project_view/query_project', params)
+  },
+  updateProject (params) {
+    return req('post', '/project_view/update_project', params)
   }
 }
 

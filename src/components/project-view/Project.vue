@@ -6,7 +6,8 @@
     <b-row class="ml-0 mr-0 row-cols-xxl-6" cols="2" cols-sm="2" cols-md="3" cols-lg="4" cols-xl="5" >
       <b-col class="p-1 d-flex flex-column" v-for="card in cards" v-bind:key="card.id">
         <b-card class="flex-grow-1">
-          <img class="img" v-bind:src="card.imgUrl" />
+          <img v-if="card.imgUrl!=''" class="img" v-bind:src="card.imgUrl" />
+          <font-awesome-icon v-else class="img" :icon="['far', 'image']" />
           <b-card-text>
             {{ card.name }}
           </b-card-text>
@@ -46,14 +47,6 @@
       <b-card header="Repositorys" no-body>
         <b-card-body class="p-2">
           <b-form inline  class="py-1" v-for="(item, index) in newProjectData.repositorys" :key="index">
-            <b-row class="m-0">
-              <label for="type" class="px-2">Type: </label>
-              <b-form-select
-                id="type"
-                v-model="item.type"
-                :options="projectTypeSelect.options"
-              />
-            </b-row>
             <b-row class="m-0 flex-grow-1 px-1">
               <label for="url" class="px-2">URL: </label>
               <b-form-input id="url" type="url" class="flex-grow-1" v-model="item.url"/>
@@ -71,32 +64,22 @@
 </template>
 <script>
 export default {
-  name: 'Cards',
+  name: 'Project',
   data () {
     return {
       cards: [
         {
           id: 0,
-          imgUrl: require('../../assets/image-regular.svg'),
+          imgUrl: '',
           name: 'Project Management System',
-          url: '/10/contributors_total'
+          url: '/project/10/profile'
         }
       ],
-      projectTypeSelect: {
-        options: [
-          { text: 'Github', value: 'github' },
-          { text: 'SonaQube', value: 'sonaqube' }
-        ]
-      },
       newProjectData: {
-        name: '123',
-        imgUrl: '435',
+        name: '',
+        imgUrl: '',
         repositorys: [{
-          type: 'github',
-          url: '7'
-        }, {
-          type: 'github',
-          url: '7'
+          url: ''
         }]
       }
     }
@@ -106,7 +89,7 @@ export default {
       let id = this.cards.length
       this.cards.push({
         id: id,
-        imgUrl: require('../../assets/image-regular.svg'),
+        imgUrl: '',
         name: 'Project',
         url: '#'
       })
@@ -124,11 +107,10 @@ export default {
       console.log(this.newProjectData)
       console.log(this.$api.view.project)
       this.$api.view.addProject(this.newProjectData).then((response) => {
-        console.log(response)
         const element = {}
-        element.imgUrl = require('../../assets/image-regular.svg')
+        element.imgUrl = ''
         element.name = response.data.name
-        element.url = `/${response.data.id}/contributors_total`
+        element.url = `/project/${response.data.id}/contributors_total`
         this.cards.push(element)
       })
     }
@@ -136,8 +118,8 @@ export default {
   created () {
     this.$api.view.queryProjectList({'username': 'test'}).then((response) => {
       response.data.forEach(element => {
-        element.imgUrl = require('../../assets/image-regular.svg')
-        element.url = `/${element.id}/contributors_total`
+        element.imgUrl = ''
+        element.url = `/project/${element.id}/profile`
         this.cards.push(element)
       })
     })
@@ -145,12 +127,9 @@ export default {
 }
 </script>
 <style scoped>
-/* .col {
-  border: 1px solid rgba(86,61,124,.2)
-}
-*/
 .img {
   width: 100%;
+  height: auto;
 }
 @media (min-width: 1440px) {
   .container, .container-sm, .container-md, .container-lg, .container-xl {

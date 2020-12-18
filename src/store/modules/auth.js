@@ -8,8 +8,13 @@ export default {
   mutations: {
     SET_AUTH (state, options) {
       state.accessToken = options.accessToken
-      state.refreshToken = options.refreshToken
+      if (options.refreshToken !== undefined) {
+        state.refreshToken = options.refreshToken
+      }
       state.isLogin = options.isLogin
+      state.username = options.username
+    },
+    CLEAR_AUTH (state) {
     }
   },
   actions: {
@@ -17,8 +22,13 @@ export default {
       context.commit('SET_AUTH', {
         accessToken: options.accessToken,
         refreshToken: options.refreshToken,
-        isLogin: options.isLogin
+        isLogin: options.isLogin,
+        username: options.username
       })
+    },
+    clearAuth (context) {
+      console.log(context)
+      context.commit('CLEAR_AUTH')
     }
   }
 }
