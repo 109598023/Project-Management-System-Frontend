@@ -6,7 +6,7 @@
     <b-row class="ml-0 mr-0 row-cols-xxl-6" cols="2" cols-sm="2" cols-md="3" cols-lg="4" cols-xl="5" >
       <b-col class="p-1 d-flex flex-column" v-for="card in cards" v-bind:key="card.id">
         <b-card class="flex-grow-1">
-          <img v-if="card.imgUrl!=''" class="img" v-bind:src="card.imgUrl" />
+          <img v-if="card.imgUrl!=''" class="img" v-bind:src="card.imgUrl" alt="" />
           <font-awesome-icon v-else class="img" :icon="['far', 'image']" />
           <b-card-text>
             {{ card.name }}

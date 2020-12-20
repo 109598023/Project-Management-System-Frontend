@@ -15,6 +15,15 @@ const view = {
   },
   updateProject (params) {
     return req('post', '/project_view/update_project', params)
+  },
+  checkPermission (params) {
+    return req('post', '/project_view/check_permission', params)
+  },
+  queryProjectRoles (params) {
+    return req('post', '/project_view/query_project_roles', params)
+  },
+  inviteMembers (params) {
+    return req('post', '/project_view/invite_members', params)
   }
 }
 

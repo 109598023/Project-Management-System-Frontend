@@ -50,10 +50,6 @@ const rotuer = new Router({
         path: '/project/:id/contributors',
         name: 'Contributors',
         component: () => import('@/components/project-view/Contributors')
-      }, {
-        path: '/project/:id/contributors_test',
-        name: 'ContributorsTest',
-        component: () => import('@/components/project-view/ContributorsTest')
       }]
     },
     {
@@ -70,9 +66,9 @@ const rotuer = new Router({
 })
 
 rotuer.beforeEach((to, from, next) => {
-  if (to.matched.some(record => { return record.meta.requiresAuth })) {
-    if (to.matched.some(record => { return record.meta.requiresCheckPermission })) {
-    }
+  const requiresAuth = to.matched.some(record => { return record.meta.requiresAuth })
+
+  if (requiresAuth) {
     api.auth.refresh({
       'refreshToken': store.state.auth.refreshToken
     }).then((response) => {
@@ -82,7 +78,19 @@ rotuer.beforeEach((to, from, next) => {
         'isLogin': true,
         'username': store.state.auth.username
       })
-      next()
+      if (to.matched.some(record => { return record.meta.requiresCheckPermission })) {
+        api.view.queryProject({
+          'id': to.params.id,
+          'username': store.state.auth.username
+        }).then(() => {
+          next()
+        }).catch((error) => {
+          console.log(error)
+          next('/project')
+        })
+      } else {
+        next()
+      }
     })
   } else {
     if (store.state.auth.isLogin) {

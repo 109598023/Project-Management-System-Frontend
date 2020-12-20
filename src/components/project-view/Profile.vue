@@ -2,7 +2,7 @@
   <b-container fluid class="h-100">
     <b-row class="m-0 flex-column h-100">
       <b-col class="p-0 flex-grow-0">
-        <b-table-simple class="h4" stacked="md" fixed>
+        <b-table-simple class="" stacked="md" fixed>
           <b-tbody>
             <b-tr>
               <b-th class="text-right" colspan="1">Name: </b-th>
@@ -19,14 +19,14 @@
           </b-tbody>
         </b-table-simple>
       </b-col>
-      <b-col class="h4 flex-grow-0 font-weight-bold">
+      <b-col class="flex-grow-0 font-weight-bold">
         Repositorys
       </b-col>
       <b-col class="mb-4 p-0 overflow-auto mh-100">
-        <b-table-simple class="m-0 p-0 h4" fixed stacked="md">
+        <b-table-simple class="m-0 p-0" fixed stacked="md">
           <b-tbody>
             <b-tr v-for="(repository, index) in this.profileData.repositorys" v-bind:key="index">
-              <b-th class="text-right" colspan="1">{{ repository.type }}</b-th>
+              <b-th class="text-right" colspan="1">URL:</b-th>
               <b-td class="text-left" colspan="5">
                 <b-link :href="repository.url">{{ repository.url }}</b-link>
               </b-td>
@@ -46,12 +46,12 @@ export default {
     }
   },
   created () {
-    this.$api.view.queryProject({'id': this.$route.params.id, 'username': 'test'})
-      .then((response) => {
-        this.profileData = response.data
-      })
+    this.$api.view.queryProject({
+      'id': this.$route.params.id,
+      'username': this.$store.state.auth.username
+    }).then((response) => {
+      this.profileData = response.data
+    })
   }
 }
 </script>
-<style scoped>
-</style>

@@ -22,7 +22,7 @@
     <div class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-grow-1 w-100 h-100">
         <div class="d-flex flex-column flex-grow-1 w-100 h-100">
-          <div class="" align="center">
+          <div class="">
             <b-img v-bind="mainProps" ref="img1" rounded="0" ></b-img>
             <span ref="name1"></span>
             <span ref="commit-size-1"></span>
@@ -241,5 +241,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-</style>
