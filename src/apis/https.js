@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from '../router'
 import store from '../store'
-import { tip, toLogin, to403Page } from './utils'
+import { tip, toLogin } from './utils'
 
 const errorHandle = (status, msg) => {
   switch (status) {
@@ -9,8 +9,7 @@ const errorHandle = (status, msg) => {
       tip(msg)
       break
     case 401:
-      if (router.currentRoute.name === 'Login') {
-      } else {
+      if (router.currentRoute.name !== 'Login') {
         store.dispatch('setAuth', {
           'accessToken': '',
           'refreshToken': '',
@@ -20,7 +19,6 @@ const errorHandle = (status, msg) => {
       }
       break
     case 403:
-      to403Page()
       break
     case 404:
       tip(msg)
@@ -35,7 +33,7 @@ var instance = axios.create({
 })
 
 instance.interceptors.request.use((config) => {
-  const token = store.state.auth.token
+  const token = store.state.auth.accessToken
   token && (config.headers.Authorization = 'Bearer ' + token)
   return config
 }, (error) => {
@@ -59,12 +57,10 @@ instance.interceptors.response.use((response) => {
   }
 })
 
-export default function (method, url, data = null, em) {
+export default function (method, url, data, em) {
   method = method.toLowerCase()
   if (method === 'post') {
-    return instance.post(url, data).catch((e) => {
-      console.log(e.message)
-    })
+    return instance.post(url, data)
   } else if (method === 'get') {
     return instance.get(url, {params: data})
   } else if (method === 'delete') {

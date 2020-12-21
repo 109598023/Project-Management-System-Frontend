@@ -8,7 +8,7 @@
             <b-form-input id="username" v-model="username" placeholder="username"></b-form-input>
           </b-form-group>
           <b-form-group id="fieldset-password" label-cols="4" label-cols-lg="2" label="Password:" label-for="password">
-            <b-form-input id="password" v-model="password" placeholder="password"></b-form-input>
+            <b-form-input id="password" type="password" v-model="password" placeholder="password"></b-form-input>
           </b-form-group>
           <b-button variant="primary" block type="submit">Login</b-button>
         </b-form>
@@ -38,7 +38,8 @@ export default {
           this.$store.dispatch('setAuth', {
             'accessToken': accessToken,
             'refreshToken': refreshToken,
-            'isLogin': true
+            'isLogin': true,
+            'username': this.username
           })
           this.$router.push('/')
         }
@@ -48,4 +49,3 @@ export default {
   }
 }
 </script>
-<style scoped></style>

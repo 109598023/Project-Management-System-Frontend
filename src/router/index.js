@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import Login from '@/components/Login'
-import Signup from '@/components/Signup'
 import store from '../store'
 import api from '../apis'
 
@@ -13,20 +10,53 @@ const rotuer = new Router({
     {
       path: '/',
       name: 'Home',
-      component: HelloWorld,
+      component: () => import('@/components/HelloWorld'),
       meta: { requiresAuth: true }
     },
     {
       path: '/login',
       name: 'Login',
-      component: Login,
+      component: () => import('@/components/Login'),
       meta: { requiresAuth: false }
     },
     {
       path: '/Signup',
       name: 'Signup',
-      component: Signup,
+      component: () => import('@/components/Signup'),
       meta: { requiresAuth: false }
+    },
+    {
+      path: '',
+      name: 'ProjectView',
+      component: () => import('@/components/project-view/ProjectViewMenu'),
+      meta: { requiresAuth: true, requiresCheckPermission: true },
+      children: [{
+        path: '/project/:id/profile',
+        name: 'Profile',
+        component: () => import('@/components/project-view/Profile')
+      }, {
+        path: '/project/:id/edit_profile',
+        name: 'EditProfile',
+        component: () => import('@/components/project-view/EditProfile')
+      }, {
+        path: '/project/:id/members',
+        name: 'Members',
+        component: () => import('@/components/project-view/Members')
+      }, {
+        path: '/project/:id/contributors_total',
+        name: 'ContributorsTotal',
+        component: () => import('@/components/project-view/ContributorsTotal')
+      }, {
+        path: '/project/:id/contributors',
+        name: 'Contributors',
+        component: () => import('@/components/project-view/Contributors')
+      }]
+    },
+    {
+      path: '/project',
+      name: 'Project',
+      component: () => import('@/components/project-view/Project'),
+      meta: { requiresAuth: true }
     },
     {
       path: '*',
@@ -36,12 +66,31 @@ const rotuer = new Router({
 })
 
 rotuer.beforeEach((to, from, next) => {
-  console.log(api)
-  if (to.matched.some(record => { return record.meta.requiresAuth })) {
+  const requiresAuth = to.matched.some(record => { return record.meta.requiresAuth })
+
+  if (requiresAuth) {
     api.auth.refresh({
       'refreshToken': store.state.auth.refreshToken
     }).then((response) => {
-      next()
+      store.dispatch('setAuth', {
+        'accessToken': response.data.accessToken,
+        'refreshToken': response.data.refreshToken,
+        'isLogin': true,
+        'username': store.state.auth.username
+      })
+      if (to.matched.some(record => { return record.meta.requiresCheckPermission })) {
+        api.view.queryProject({
+          'id': to.params.id,
+          'username': store.state.auth.username
+        }).then(() => {
+          next()
+        }).catch((error) => {
+          console.log(error)
+          next('/project')
+        })
+      } else {
+        next()
+      }
     })
   } else {
     if (store.state.auth.isLogin) {
