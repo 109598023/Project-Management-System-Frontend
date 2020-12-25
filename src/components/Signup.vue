@@ -2,21 +2,25 @@
   <b-container>
     <b-row>
       <b-col md=6  class="mx-auto">
-        <b-form @submit.prevent="handleSubmit">
-          <h1>Sign up</h1>
-          <b-form-group id="fieldset-email" label-cols-sm="4" label-cols-lg="3" label="email:" label-for="email" align="right">
-            <b-form-input id="email" v-model="email" placeholder="email"></b-form-input>
-          </b-form-group>
-          <b-form-group id="fieldset-username" label-cols-sm="4" label-cols-lg="3" label="Username:" label-for="username" align="right">
-            <b-form-input id="username" v-model="username" placeholder="username"></b-form-input>
-          </b-form-group>
-          <b-form-group id="fieldset-password" label-cols-sm="4" label-cols-lg="3" label="password:" label-for="password" align="right">
-            <b-form-input id="password" v-model="password" placeholder="password"></b-form-input>
-          </b-form-group>
-          <b-form-group id="fieldset-repeat_password" label-cols-sm="4" label-cols-lg="3" label="repeat_password:" label-for="repeat_password" align="right">
-            <b-form-input id="repeat_password" v-model="repeat_password" placeholder="repeat_password"></b-form-input>
-          </b-form-group>
-          <b-button variant="primary" block type="submit">Login</b-button>
+        <b-form @submit.prevent="handleSubmit" class="mt-4">
+          <h1 class="mb-3">Create your account</h1>
+          <div class="text-left pb-3">
+            <b-alert variant="danger" :show="usernameAlertShow">Username {{ username }} is not available</b-alert>
+            <label class="font-weight-bold" for="username">Username <code>*</code></label>
+            <b-form-input id="username" type="text" v-model="username" autocomplete="off" :state="usernameInputState"></b-form-input>
+          </div>
+          <div class="text-left pb-3">
+            <b-alert variant="danger" :show="emailAlertShow">Email is invalid or already taken</b-alert>
+            <label class="font-weight-bold" for="email">Email address <code>*</code></label>
+            <b-input-group>
+              <b-form-input id="email" type="email" v-model="email" autocomplete="off" :state="emailInputState"></b-form-input>
+            </b-input-group>
+          </div>
+          <div class="text-left pb-3">
+            <label class="font-weight-bold" for="password">Password <code>*</code></label>
+            <b-form-input id="password" type="password" v-model="password" autocomplete="off" :state="passwordInputState"></b-form-input>
+          </div>
+          <b-button class="p-2 font-weight-bold" variant="primary" block type="submit" :disabled="disabledCreateButton">Create account</b-button>
         </b-form>
       </b-col>
     </b-row>
@@ -27,21 +31,82 @@ export default {
   name: 'Singup',
   data () {
     return {
-      email: 'test@test.test',
-      username: 'test',
-      password: 'test',
-      repeat_password: 'test'
+      email: '',
+      username: '',
+      password: '',
+      usernameInputState: null,
+      emailInputState: null,
+      passwordInputState: null,
+      usernameAlertShow: false,
+      emailAlertShow: false
+      // disabledCreateButton: true
     }
   },
   methods: {
     async handleSubmit () {
-      if (this.repeat_password === this.password) {
-        this.$api.auth.signUp({
-          email: this.email,
-          username: this.username,
-          password: this.password
+      this.$api.auth.signUp({
+        email: this.email,
+        username: this.username,
+        password: this.password
+      }).then((response) => {
+        console.log(response)
+      })
+    }
+  },
+  computed: {
+    disabledCreateButton () {
+      console.log(!this.usernameInputState || !this.emailInputState || !this.passwordInputState)
+      return !this.usernameInputState || !this.emailInputState || !this.passwordInputState
+    }
+  },
+  watch: {
+    username () {
+      if (this.username === '') {
+        this.usernameInputState = null
+        this.usernameAlertShow = false
+      } else {
+        this.$api.auth.signupCheckUsername({
+          'username': this.username
         }).then((response) => {
+          this.usernameInputState = true
+          this.usernameAlertShow = false
+        }).catch(() => {
+          this.usernameInputState = false
+          this.usernameAlertShow = true
         })
+      }
+    },
+    email () {
+      if (this.email === '') {
+        this.emailAlertShow = false
+        this.emailInputState = null
+        this.searchEmailLoadingShow = false
+      } else {
+        const re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/g
+        const matchResult = this.email.match(re)
+
+        if (!matchResult) {
+          this.emailAlertShow = true
+          this.emailInputState = false
+        } else {
+          this.$api.auth.signupCheckEmail({
+            'email': this.email
+          }).then((response) => {
+            this.emailInputState = true
+            this.emailAlertShow = false
+          }).catch(() => {
+            this.emailInputState = false
+            this.emailAlertShow = true
+          })
+        }
+        // this.disabledCreateButton = !this.usernameInputState || !this.emailInputState || !this.passwordInputState
+      }
+    },
+    password () {
+      if (this.password === '') {
+        this.passwordInputState = null
+      } else {
+        this.passwordInputState = true
       }
     }
   }

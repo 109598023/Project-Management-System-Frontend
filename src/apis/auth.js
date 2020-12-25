@@ -9,6 +9,12 @@ const auth = {
   },
   refresh (params) {
     return req('post', '/auth/refresh', params)
+  },
+  signupCheckUsername (params) {
+    return req('post', '/user/signup_check_username', params)
+  },
+  signupCheckEmail (params) {
+    return req('post', '/user/signup_check_email', params)
   }
 }
 

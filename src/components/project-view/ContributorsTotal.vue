@@ -79,8 +79,8 @@ export default {
   },
   methods: {
     async getContributorsData (id) {
-      this.$api.view.contributors().then((r) => {
-        const data = r.data.total
+      this.$api.view.contributorsTotal({'a': ''}).then((r) => {
+        const data = r.data
         this.data = data
         this.line.xAxis.data = data.weeks
         this.changeEChartsData('commits')

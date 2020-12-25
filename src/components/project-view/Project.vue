@@ -44,18 +44,18 @@
           <b-form-input id="image-url-input" v-model="newProjectData.imgUrl" type="url"></b-form-input>
         </b-form-group>
       </b-card>
-      <b-card header="Repositorys" no-body>
+      <b-card header="Repositories" no-body>
         <b-card-body class="p-2">
-          <b-form inline  class="py-1" v-for="(item, index) in newProjectData.repositorys" :key="index">
+          <b-form inline  class="py-1" v-for="(item, index) in newProjectData.repositories" :key="index">
             <b-row class="m-0 flex-grow-1 px-1">
               <label for="url" class="px-2">URL: </label>
               <b-form-input id="url" type="url" class="flex-grow-1" v-model="item.url"/>
             </b-row>
-            <b-avatar v-if="newProjectData.repositorys.length == 1" disabled variant="danger" size="sm"><font-awesome-icon icon="minus" /></b-avatar>
+            <b-avatar v-if="newProjectData.repositories.length == 1" disabled variant="danger" size="sm"><font-awesome-icon icon="minus" /></b-avatar>
             <b-avatar v-else  button variant="danger" size="sm" @click="removeRepository(index)"><font-awesome-icon icon="minus" /></b-avatar>
           </b-form>
           <b-row align-h="end" class="m-0">
-            <b-button variant="primary" @click="addRepository">Add Repositorys</b-button>
+            <b-button variant="primary" @click="addRepository">Add Repositories</b-button>
           </b-row>
         </b-card-body>
       </b-card>
@@ -68,17 +68,11 @@ export default {
   data () {
     return {
       cards: [
-        {
-          id: 0,
-          imgUrl: '',
-          name: 'Project Management System',
-          url: '/project/10/profile'
-        }
       ],
       newProjectData: {
         name: '',
         imgUrl: '',
-        repositorys: [{
+        repositories: [{
           url: ''
         }]
       }
@@ -95,18 +89,23 @@ export default {
       })
     },
     addRepository () {
-      this.newProjectData.repositorys.push({
+      this.newProjectData.repositories.push({
         type: 'github',
-        url: this.newProjectData.repositorys.length
+        url: this.newProjectData.repositories.length
       })
     },
     removeRepository (index) {
-      this.newProjectData.repositorys.splice(index, 1)
+      this.newProjectData.repositories.splice(index, 1)
     },
     addProject () {
       console.log(this.newProjectData)
       console.log(this.$api.view.project)
-      this.$api.view.addProject(this.newProjectData).then((response) => {
+      this.$api.view.addProject({
+        'name': this.newProjectData.name,
+        'imgUrl': this.newProjectData.imgUrl,
+        'repositories': this.newProjectData.repositories,
+        'username': this.$store.state.auth.username
+      }).then((response) => {
         const element = {}
         element.imgUrl = ''
         element.name = response.data.name
@@ -116,7 +115,9 @@ export default {
     }
   },
   created () {
-    this.$api.view.queryProjectList({'username': 'test'}).then((response) => {
+    this.$api.view.queryProjectList({
+      'username': this.$store.state.auth.username
+    }).then((response) => {
       response.data.forEach(element => {
         element.imgUrl = ''
         element.url = `/project/${element.id}/profile`

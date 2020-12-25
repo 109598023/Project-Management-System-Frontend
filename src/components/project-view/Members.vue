@@ -2,7 +2,7 @@
   <b-container fluid>
     <b-row class="p-4 flex-column">
       <b-col class="text-left"><h4>Project members</h4></b-col>
-      <b-col class="p-0">
+      <b-col class="p-0" v-if="showInviteMembers">
         <b-tabs
           class="tabs-border"
           v-model="tabIndex"
@@ -37,9 +37,9 @@
               Add to project
             </b-button>
           </b-tab>
-          <b-tab title="Invite group" :title-link-class="linkClass(1)">
+          <!-- <b-tab title="Invite group" :title-link-class="linkClass(1)">
             <p>I'm the second tab</p>
-          </b-tab>
+          </b-tab> -->
         </b-tabs>
       </b-col>
       <b-col class="p-0 pt-4">
@@ -64,14 +64,11 @@ export default {
   data () {
     return {
       member: '',
-      role: 'GUEST',
-      roleOptions: [
-        { value: 'GUEST', text: 'Guest' },
-        { value: 'MAINTAINER', text: 'Maintainer' },
-        { value: 'OWNER', text: 'Owner' }
-      ],
+      role: 'Guest',
+      roleOptions: [],
       tabIndex: 0,
       projectRoles: [],
+      showInviteMembers: true,
       inviteValue: [],
       inviteTbasPlaceholder: 'Search for members to update or invite'
     }
@@ -85,12 +82,13 @@ export default {
       }
     },
     inviteMembers () {
-      console.log(this)
       this.$api.view.inviteMembers({
         'projectId': this.$route.params.id,
         'inviterUsername': this.$store.state.auth.username,
         'inviteesUsername': this.inviteValue,
         'roleName': this.role
+      }).then((response) => {
+        this.projectRoles = response.data
       })
     }
   },
@@ -100,7 +98,21 @@ export default {
       'username': this.$store.state.auth.username
     }).then((response) => {
       this.projectRoles = response.data
-      console.log(this.projectRoles)
+      const role = this.projectRoles.find(r => r.username === this.$store.state.auth.username)
+      if (role.roleName === 'Owner') {
+        this.roleOptions = [
+          { value: 'Guest', text: 'Guest' },
+          { value: 'Maintainer', text: 'Maintainer' },
+          { value: 'Owner', text: 'Owner' }
+        ]
+      } else if (role.roleName === 'Maintainer') {
+        this.roleOptions = [
+          { value: 'Guest', text: 'Guest' },
+          { value: 'Maintainer', text: 'Maintainer' }
+        ]
+      } else {
+        this.showInviteMembers = false
+      }
     })
   },
   watch: {

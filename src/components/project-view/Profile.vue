@@ -20,12 +20,12 @@
         </b-table-simple>
       </b-col>
       <b-col class="flex-grow-0 font-weight-bold">
-        Repositorys
+        Repositories
       </b-col>
       <b-col class="mb-4 p-0 overflow-auto mh-100">
         <b-table-simple class="m-0 p-0" fixed stacked="md">
           <b-tbody>
-            <b-tr v-for="(repository, index) in this.profileData.repositorys" v-bind:key="index">
+            <b-tr v-for="(repository, index) in this.profileData.repositories" v-bind:key="index">
               <b-th class="text-right" colspan="1">URL:</b-th>
               <b-td class="text-left" colspan="5">
                 <b-link :href="repository.url">{{ repository.url }}</b-link>

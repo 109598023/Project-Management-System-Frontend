@@ -1,7 +1,9 @@
 <template>
-  <div id="app">
-    <navbar></navbar>
-    <router-view/>
+  <div id="app" class="d-flex flex-column">
+    <navbar class="position-relative"></navbar>
+    <div class="flex-grow-1">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -20,7 +22,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 68px;
-  height: calc(100vh - 68px);
+  height: 100vh;
+  /* margin-top: 56px; */
+  /* height: calc(100vh - 56px); */
 }
 </style>

@@ -20,13 +20,13 @@
         </b-table-simple>
       </b-col>
       <b-col class="p-2 flex-grow-0 font-weight-bold">
-        Repositorys
+        Repositories
         <b-avatar button variant="primary" size="sm" @click="addRepository()">+</b-avatar>
       </b-col>
       <b-col class="p-0 overflow-auto mh-100">
         <b-table-simple class="m-0 p-0" fixed stacked="md">
           <b-tbody>
-            <b-tr v-for="(repository, index) in profileData.repositorys" v-bind:key="index">
+            <b-tr v-for="(repository, index) in profileData.repositories" v-bind:key="index">
               <b-th class="text-right" colspan="1">URL:</b-th>
               <b-td class="text-left" colspan="5">
                 <b-row class="m-0">
@@ -34,7 +34,7 @@
                     <b-input type="url" v-model="repository.url"/>
                   </b-col>
                   <b-col class="flex-grow-0">
-                    <b-avatar v-if="profileData.repositorys.length == 1" disabled variant="danger" size="sm"><font-awesome-icon icon="minus" /></b-avatar>
+                    <b-avatar v-if="profileData.repositories.length == 1" disabled variant="danger" size="sm"><font-awesome-icon icon="minus" /></b-avatar>
                     <b-avatar v-else  button variant="danger" size="sm" @click="removeRepository(index)"><font-awesome-icon icon="minus" /></b-avatar>
                   </b-col>
                 </b-row>
@@ -67,20 +67,20 @@ export default {
   },
   methods: {
     addRepository () {
-      this.profileData.repositorys.push({
+      this.profileData.repositories.push({
         type: 'github',
         url: ''
       })
     },
     removeRepository (index) {
-      this.profileData.repositorys.splice(index, 1)
+      this.profileData.repositories.splice(index, 1)
     },
     updateProject () {
       this.$api.view.updateProject({
         'id': this.profileData.id,
         'name': this.profileData.name,
         'imgUrl': this.profileData.url ? this.profileData.url : '',
-        'repositories': this.profileData.repositorys,
+        'repositories': this.profileData.repositories,
         'username': this.$store.state.auth.username
       }).then((response) => {
         console.log(response)
