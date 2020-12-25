@@ -1,16 +1,21 @@
 <template>
   <b-container>
     <b-row>
-      <b-col md=6  class="mx-auto">
-        <b-form @submit.prevent="handleSubmit">
-          <h1>Login</h1>
-          <b-form-group id="fieldset-username" label-cols="4" label-cols-lg="2" label="Username:" label-for="username">
-            <b-form-input id="username" v-model="username" placeholder="username"></b-form-input>
-          </b-form-group>
-          <b-form-group id="fieldset-password" label-cols="4" label-cols-lg="2" label="Password:" label-for="password">
-            <b-form-input id="password" type="password" v-model="password" placeholder="password"></b-form-input>
-          </b-form-group>
-          <b-button variant="primary" block type="submit">Login</b-button>
+      <b-col md=6 class="mx-auto">
+        <b-form @submit.prevent="handleSubmit" class="mt-4">
+          <h1 class="mb-3">Sign in to PMS</h1>
+          <b-alert v-model="showIncorrectAlert" variant="danger" dismissible>
+            Incorrect username or password.
+          </b-alert>
+          <div class="text-left pb-3">
+            <label class="font-weight-bold" for="username">Username</label>
+            <b-form-input id="username" type="text" v-model="username"></b-form-input>
+          </div>
+          <div class="text-left pb-3">
+            <label class="font-weight-bold" for="password">Password</label>
+            <b-form-input id="password" type="password" v-model="password"></b-form-input>
+          </div>
+          <b-button variant="primary" block type="submit">Sign in</b-button>
         </b-form>
       </b-col>
     </b-row>
@@ -22,7 +27,8 @@ export default {
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      showIncorrectAlert: false
     }
   },
   methods: {
@@ -32,18 +38,16 @@ export default {
         password: this.password
       }).then((response) => {
         if (response.data !== undefined) {
-          const res = response.data
-          const accessToken = res.accessToken
-          const refreshToken = res.refreshToken
           this.$store.dispatch('setAuth', {
-            'accessToken': accessToken,
-            'refreshToken': refreshToken,
-            'isLogin': true,
-            'username': this.username
+            'accessToken': response.data.accessToken,
+            'refreshToken': response.data.refreshToken,
+            'username': this.username,
+            'isLogin': true
           })
           this.$router.push('/')
         }
       }).catch((e) => {
+        this.showIncorrectAlert = true
       })
     }
   }

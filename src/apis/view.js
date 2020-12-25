@@ -4,6 +4,9 @@ const view = {
   contributors (params) {
     return req('post', '/project_view/github/contributors', params)
   },
+  contributorsTotal (params) {
+    return req('post', '/project_view/github/contributors_total', params)
+  },
   addProject (params) {
     return req('post', '/project_view/add_project', params)
   },
@@ -24,6 +27,12 @@ const view = {
   },
   inviteMembers (params) {
     return req('post', '/project_view/invite_members', params)
+  },
+  queryMeasures (params) {
+    return req('post', '/project_view/sonar_qube/query_measures', params)
+  },
+  queryPunchCard (params) {
+    return req('post', '/project_view/github/punch_card', params)
   }
 }
 

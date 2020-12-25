@@ -43,13 +43,22 @@ const rotuer = new Router({
         name: 'Members',
         component: () => import('@/components/project-view/Members')
       }, {
-        path: '/project/:id/contributors_total',
+        path: '/project/:id/github/contributors_total',
         name: 'ContributorsTotal',
         component: () => import('@/components/project-view/ContributorsTotal')
       }, {
-        path: '/project/:id/contributors',
+        path: '/project/:id/github/contributors',
         name: 'Contributors',
         component: () => import('@/components/project-view/Contributors')
+      }, {
+        path: '/project/:id/github/punch_card',
+        name: 'PunchCard',
+        component: () => import('@/components/project-view/github/PunchCard')
+      }, {
+        path: '/project/:id/sonarqube/measures',
+        name: 'Measures',
+        component: () => import('@/components/project-view/sonarqube/Measures'),
+        meta: { requiresAuth: true }
       }]
     },
     {

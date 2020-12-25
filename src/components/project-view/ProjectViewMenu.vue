@@ -65,32 +65,43 @@ export default {
           href: `/project/${this.$route.params.id}/members`
         },
         {
-          header: true,
-          title: 'Project Repository',
-          hiddenOnCollapse: true
-        },
-        {
-          title: 'Github',
+          title: 'Repositories',
           icon: {
             element: 'font-awesome-icon',
             attributes: {
-              icon: ['fab', 'github']
+              icon: ['fas', 'folder']
             }
           },
           child: [
             {
-              href: `/project/${this.$route.params.id}/contributors_total`,
-              title: 'page'
+              title: 'Github',
+              child: [
+                {
+                  title: 'Contributors Total',
+                  href: `/project/${this.$route.params.id}/github/contributors_total`
+                },
+                {
+                  title: 'Contributors',
+                  href: `/project/${this.$route.params.id}/github/contributors`,
+                  alias: /\/project\/\d+\/github\/contributors#\d+/
+                },
+                {
+                  title: 'Punch Card',
+                  href: `/project/${this.$route.params.id}/github/punch_card`
+                }
+              ]
             },
             {
-              href: `/project/${this.$route.params.id}/contributors`,
-              title: 'page2'
+              component: separator
             },
             {
-              title: 'page3'
-            },
-            {
-              title: 'page4'
+              title: 'SonarQube',
+              child: [
+                {
+                  title: 'measures',
+                  href: `/project/${this.$route.params.id}/sonarqube/measures`
+                }
+              ]
             }
           ]
         }
@@ -142,6 +153,9 @@ export default {
       }
     }
   }
+}
+const separator = {
+  template: `<hr style="border-color: rgba(0, 0, 0, 0.1); margin: 2px;">`
 }
 </script>
 <style scoped>

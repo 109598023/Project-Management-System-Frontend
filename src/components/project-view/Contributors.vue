@@ -146,8 +146,8 @@ export default {
   },
   methods: {
     async getContributorsData () {
-      this.$api.view.contributors().then((r) => {
-        const contributorsDatas = r.data.all
+      this.$api.view.contributors({'a': ''}).then((r) => {
+        const contributorsDatas = r.data
         const length = contributorsDatas[0].weeks.length
         this.contributorsDatas = contributorsDatas
         this.$data[`pages`] = ((contributorsDatas.length - 1) / 4) + 1

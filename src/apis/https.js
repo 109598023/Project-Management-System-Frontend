@@ -23,6 +23,8 @@ const errorHandle = (status, msg) => {
     case 404:
       tip(msg)
       break
+    case 422:
+      break
     default:
       console.log('resp沒有攔截到的錯誤: ' + msg)
   }
