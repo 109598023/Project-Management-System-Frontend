@@ -88,6 +88,10 @@ export default {
                 {
                   title: 'Punch Card',
                   href: `/project/${this.$route.params.id}/github/punch_card`
+                },
+                {
+                  title: 'Issue',
+                  href: `/project/${this.$route.params.id}/github/issue`
                 }
               ]
             },

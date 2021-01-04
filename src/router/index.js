@@ -56,6 +56,10 @@ const rotuer = new Router({
         name: 'PunchCard',
         component: () => import('@/components/project-view/github/PunchCard')
       }, {
+        path: '/project/:id/github/Issue',
+        name: 'Issue',
+        component: () => import('@/components/project-view/github/Issue')
+      }, {
         path: '/project/:id/sonarqube/measures',
         name: 'Measures',
         component: () => import('@/components/project-view/sonarqube/Measures'),
