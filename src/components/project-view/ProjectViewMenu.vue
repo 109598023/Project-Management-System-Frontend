@@ -125,6 +125,12 @@ export default {
     console.log(this.$route.params)
     this.onResize()
     window.addEventListener('resize', this.onResize)
+    this.$api.view.queryProject({
+      'id': this.$route.params.id,
+      'username': this.$store.state.auth.username
+    }).then((response) => {
+      console.log(response.data)
+    })
   },
   methods: {
     onToggleCollapse (collapsed) {
@@ -140,6 +146,27 @@ export default {
         this.isOnMobile = false
         this.collapsed = false
       }
+    },
+    addRepositoryMenu (repositories) {
+      // const repositoriesMenu = {
+      //   title: 'Repositories',
+      //   icon: {
+      //     element: 'font-awesome-icon',
+      //     attributes: {
+      //       icon: ['fas', 'folder']
+      //     }
+      //   }
+      // }
+      // const child = []
+      // const githubChild = this.addGithubMenuChild(repositories)
+      // const sonarQubeChild = this.addSonarQubeMenuChild(repositories)
+      // this.menu.push(repositoriesMenu)
+    },
+    addGithubMenuChild () {
+
+    },
+    addSonarQubeMenuChild () {
+
     }
   },
   watch: {

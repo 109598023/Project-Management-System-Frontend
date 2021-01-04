@@ -49,7 +49,7 @@ export default {
         username: this.username,
         password: this.password
       }).then((response) => {
-        console.log(response)
+        this.$router.push('/login')
       })
     }
   },

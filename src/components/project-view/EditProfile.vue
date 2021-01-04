@@ -31,7 +31,7 @@
               <b-td class="text-left" colspan="5">
                 <b-row class="m-0">
                   <b-col class="m-0 p-0">
-                    <b-input type="url" v-model="repository.url"/>
+                    <b-input type="url" v-model="repository.url" :state="repository.state" @update="isValidRepository(repository)"/>
                   </b-col>
                   <b-col class="flex-grow-0">
                     <b-avatar v-if="profileData.repositories.length == 1" disabled variant="danger" size="sm"><font-awesome-icon icon="minus" /></b-avatar>
@@ -44,7 +44,7 @@
         </b-table-simple>
       </b-col>
       <b-col class="flex-grow-0 m-2">
-          <b-button @click="updateProject">Update</b-button>
+          <b-button @click="updateProject" :disabled="updateDisabled">Update</b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -54,7 +54,8 @@ export default {
   name: 'EditProfile',
   data () {
     return {
-      profileData: {}
+      profileData: {},
+      updateDisabled: false
     }
   },
   created () {
@@ -63,17 +64,22 @@ export default {
       'username': this.$store.state.auth.username
     }).then((response) => {
       this.profileData = response.data
+      this.profileData.repositories.forEach((r) => {
+        r.state = true
+      })
     })
   },
   methods: {
     addRepository () {
       this.profileData.repositories.push({
-        type: 'github',
-        url: ''
+        url: '',
+        state: false
       })
+      this.updateDisabled = true
     },
     removeRepository (index) {
       this.profileData.repositories.splice(index, 1)
+      this.changeUpdateDisabled()
     },
     updateProject () {
       this.$api.view.updateProject({
@@ -85,6 +91,21 @@ export default {
       }).then((response) => {
         console.log(response)
       })
+    },
+    isValidRepository (repository) {
+      console.log(repository)
+      this.$api.view.validateProjectUrl({
+        'url': repository.url
+      }).then((response) => {
+        repository.state = response.data
+        this.changeUpdateDisabled()
+      })
+    },
+    changeUpdateDisabled () {
+      let invalid = this.profileData.repositories.some((r) => {
+        return !r.state
+      })
+      this.updateDisabled = invalid
     }
   }
 }
