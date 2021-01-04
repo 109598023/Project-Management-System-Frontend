@@ -51,6 +51,7 @@ export default {
       'username': this.$store.state.auth.username
     }).then((response) => {
       this.profileData = response.data
+      console.log(this.profileData)
     })
   }
 }

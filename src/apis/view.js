@@ -34,6 +34,9 @@ const view = {
   queryPunchCard (params) {
     return req('post', '/project_view/github/punch_card', params)
   },
+  validateProjectUrl (params) {
+    return req('post', '/project_view/validate_project_url', params)
+  },
   queryIssue (params) {
     return req('post', '/project_view/github/Issue', params)
   }

@@ -9,8 +9,9 @@ const rotuer = new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: () => import('@/components/HelloWorld'),
+      name: 'Project',
+      alias: ['/project'],
+      component: () => import('@/components/project-view/Project'),
       meta: { requiresAuth: true }
     },
     {
@@ -20,7 +21,7 @@ const rotuer = new Router({
       meta: { requiresAuth: false }
     },
     {
-      path: '/Signup',
+      path: '/signup',
       name: 'Signup',
       component: () => import('@/components/Signup'),
       meta: { requiresAuth: false }
@@ -64,12 +65,6 @@ const rotuer = new Router({
         component: () => import('@/components/project-view/sonarqube/Measures'),
         meta: { requiresAuth: true }
       }]
-    },
-    {
-      path: '/project',
-      name: 'Project',
-      component: () => import('@/components/project-view/Project'),
-      meta: { requiresAuth: true }
     },
     {
       path: '*',

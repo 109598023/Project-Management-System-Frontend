@@ -11,7 +11,10 @@
 import Navbar from './components/Navbar.vue'
 export default {
   components: { Navbar },
-  name: 'App'
+  name: 'App',
+  created () {
+    console.log('test ')
+  }
 }
 </script>
 

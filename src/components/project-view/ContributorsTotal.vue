@@ -17,7 +17,6 @@
         v-model="datepickerEndValue"
         locale="en"
       ></b-form-datepicker>
-      <b-form-select v-model="selected" :options="options"></b-form-select>
     </div>
     <div class="flex-grow-1" style="height: 100%; width:100%">
       <v-chart ref="chart" :autoresize="true" :options="line" style="height: 100%; width:100%"/>
@@ -30,6 +29,8 @@ import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/dataZoom'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/tooltip'
 
 export default {
   name: 'ContributorsTotal',
@@ -42,14 +43,14 @@ export default {
       datepickerMax: '',
       datepickerStartValue: '',
       datepickerEndValue: '',
-      selected: 'commits',
-      options: [
-        { value: 'additions', text: 'additions' },
-        { value: 'deletions', text: 'deletions' },
-        { value: 'commits', text: 'commits' }
-      ],
       data: {},
       line: {
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['code base', 'additions', 'deletions', 'commits']
+        },
         dataZoom: [{
           type: 'slider',
           show: true,
@@ -68,36 +69,58 @@ export default {
         yAxis: {
           type: 'value'
         },
-        series: [{
-          data: [],
-          type: 'line',
-          smooth: true,
-          areaStyle: {}
-        }]
+        series: []
       }
     }
   },
   methods: {
     async getContributorsData (id) {
-      this.$api.view.contributorsTotal({'a': ''}).then((r) => {
-        const data = r.data
-        this.data = data
-        this.line.xAxis.data = data.weeks
-        this.changeEChartsData('commits')
-        this.line.dataZoom[0].endValue = data.weeks.length - 1
-        this.line.dataZoom[1].endValue = data.weeks.length - 1
+      this.$api.view.contributorsTotal({}).then((r) => {
+        this.data = r.data
+        const weeks = this.data.weeks
+        const additions = this.data.additions
+        const deletions = this.data.deletions
+        const commits = this.data.commits
+        const codeBase = []
+        codeBase.push(additions[0] - deletions[0])
+        for (let i = 1, length = additions.length; i < length; i++) {
+          codeBase.push(codeBase[i - 1] + additions[i] - deletions[i])
+        }
+        this.line.xAxis.data = weeks
+        this.line.series.push({
+          name: 'commits',
+          type: 'line',
+          smooth: true,
+          areaStyle: {},
+          data: commits
+        })
+        this.line.series.push({
+          name: 'additions',
+          type: 'line',
+          smooth: true,
+          areaStyle: {},
+          data: additions
+        })
+        this.line.series.push({
+          name: 'deletions',
+          type: 'line',
+          smooth: true,
+          areaStyle: {},
+          data: deletions
+        })
+        this.line.series.push({
+          name: 'code base',
+          type: 'line',
+          smooth: true,
+          areaStyle: {},
+          data: codeBase
+        })
+
+        this.line.dataZoom[0].endValue = weeks.length - 1
+        this.line.dataZoom[1].endValue = weeks.length - 1
         this.$refs.chart.hideLoading()
-        this.setMaxAndMinDate(data.weeks)
+        this.setMaxAndMinDate(weeks)
       })
-    },
-    changeEChartsData (name) {
-      if (name === 'additions') {
-        this.line.series[0].data = this.data.additions
-      } else if (name === 'deletions') {
-        this.line.series[0].data = this.data.deletions
-      } else if (name === 'commits') {
-        this.line.series[0].data = this.data.commits
-      }
     },
     setMaxAndMinDate (weeks) {
       this.datepickerMin = new Date(weeks[0])
@@ -117,14 +140,10 @@ export default {
     }
   },
   mounted: function () {
-    console.log(this.$route.params)
     this.$refs.chart.showLoading()
     this.getContributorsData()
   },
   watch: {
-    selected: function () {
-      this.changeEChartsData(this.selected)
-    },
     datepickerStartValue: function () {
       const weeks = this.data.weeks
       const index = weeks.indexOf(this.dateFormat(this.datepickerStartValue))
