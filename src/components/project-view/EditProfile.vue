@@ -10,7 +10,7 @@
                 <b-input type="text" v-model="profileData.name" />
               </b-td>
             </b-tr>
-            <b-tr>
+            <b-tr v-show="false">
               <b-th class="text-right" colspan="1">Image URL: </b-th>
               <b-td class="text-left" colspan="5">
                 <b-input type="url" v-model="profileData.imgUrl" />
@@ -93,7 +93,6 @@ export default {
       })
     },
     isValidRepository (repository) {
-      console.log(repository)
       this.$api.view.validateProjectUrl({
         'url': repository.url
       }).then((response) => {

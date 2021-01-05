@@ -44,23 +44,23 @@ const rotuer = new Router({
         name: 'Members',
         component: () => import('@/components/project-view/Members')
       }, {
-        path: '/project/:id/github/contributors_total',
+        path: '/project/:id/github/:rid/contributors_total',
         name: 'ContributorsTotal',
-        component: () => import('@/components/project-view/ContributorsTotal')
+        component: () => import('@/components/project-view/github/ContributorsTotal')
       }, {
-        path: '/project/:id/github/contributors',
+        path: '/project/:id/github/:rid/contributors',
         name: 'Contributors',
-        component: () => import('@/components/project-view/Contributors')
+        component: () => import('@/components/project-view/github/Contributors')
       }, {
-        path: '/project/:id/github/punch_card',
+        path: '/project/:id/github/:rid/punch_card',
         name: 'PunchCard',
         component: () => import('@/components/project-view/github/PunchCard')
       }, {
-        path: '/project/:id/github/Issue',
+        path: '/project/:id/github/:rid/Issue',
         name: 'Issue',
         component: () => import('@/components/project-view/github/Issue')
       }, {
-        path: '/project/:id/sonarqube/measures',
+        path: '/project/:id/sonarqube/:rid/measures',
         name: 'Measures',
         component: () => import('@/components/project-view/sonarqube/Measures'),
         meta: { requiresAuth: true }

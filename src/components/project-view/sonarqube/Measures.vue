@@ -60,9 +60,11 @@ export default {
   methods: {
     async queryMeasures () {
       this.$api.view.queryMeasures({
+        id: this.$route.params.id,
+        repositoryId: this.$route.params.rid,
+        username: this.$store.state.auth.username
       }).then((response) => {
         for (const [key, value] of Object.entries(response.data)) {
-          console.log(`${key} ${value.value}`)
           this.$data[key] = value.value
         }
         this.reliability_rating = 6 - this.reliability_rating
@@ -74,6 +76,12 @@ export default {
   },
   created () {
     this.queryMeasures()
+    console.log('test')
+  },
+  watch: {
+    '$route' (to, from) {
+      this.queryMeasures()
+    }
   }
 }
 </script>

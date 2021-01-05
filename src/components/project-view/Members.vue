@@ -102,13 +102,6 @@ export default {
       if (role.roleName === 'Owner') {
         this.roleOptions = [
           { value: 'Guest', text: 'Guest' },
-          { value: 'Maintainer', text: 'Maintainer' },
-          { value: 'Owner', text: 'Owner' }
-        ]
-      } else if (role.roleName === 'Maintainer') {
-        this.roleOptions = [
-          { value: 'Guest', text: 'Guest' },
-          { value: 'Maintainer', text: 'Maintainer' }
         ]
       } else {
         this.showInviteMembers = false

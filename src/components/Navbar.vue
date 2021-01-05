@@ -5,7 +5,6 @@
     <b-collapse id="nav-collpase" is-nav>
       <b-navbar-nav class="ml-auto" right v-if="isLogin">
         <b-nav-item to="/project">Project</b-nav-item>
-        <b-nav-item to="/profile">Profile</b-nav-item>
         <b-nav-item to="/logout" @click.prevent="logout">
           <font-awesome-icon icon="sign-out-alt" /> Sing out
         </b-nav-item>
