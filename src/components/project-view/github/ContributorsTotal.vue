@@ -58,8 +58,6 @@ export default {
           endValue: 0
         }, {
           type: 'inside',
-          startValue: 0,
-          endValue: 0
         }],
         xAxis: {
           type: 'category',
@@ -75,13 +73,18 @@ export default {
   },
   methods: {
     async getContributorsData (id) {
-      this.$api.view.contributorsTotal({}).then((r) => {
+      this.$api.view.contributorsTotal({
+        id: this.$route.params.id,
+        repositoryId: this.$route.params.rid,
+        username: this.$store.state.auth.username
+      }).then((r) => {
         this.data = r.data
         const weeks = this.data.weeks
         const additions = this.data.additions
         const deletions = this.data.deletions
         const commits = this.data.commits
         const codeBase = []
+        this.line.series.length = 0
         codeBase.push(additions[0] - deletions[0])
         for (let i = 1, length = additions.length; i < length; i++) {
           codeBase.push(codeBase[i - 1] + additions[i] - deletions[i])
@@ -117,7 +120,6 @@ export default {
         })
 
         this.line.dataZoom[0].endValue = weeks.length - 1
-        this.line.dataZoom[1].endValue = weeks.length - 1
         this.$refs.chart.hideLoading()
         this.setMaxAndMinDate(weeks)
       })
@@ -148,13 +150,14 @@ export default {
       const weeks = this.data.weeks
       const index = weeks.indexOf(this.dateFormat(this.datepickerStartValue))
       this.line.dataZoom[0].startValue = index
-      this.line.dataZoom[1].startValue = index
     },
     datepickerEndValue: function () {
       const weeks = this.data.weeks
       const index = weeks.indexOf(this.dateFormat(this.datepickerEndValue))
       this.line.dataZoom[0].endValue = index
-      this.line.dataZoom[1].endValue = index
+    },
+    '$route' (to, from) {
+      this.getContributorsData()
     }
   }
 }

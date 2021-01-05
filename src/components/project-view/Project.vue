@@ -34,13 +34,14 @@
           label-cols-sm="3"
           label-align-sm="right"
         >
-          <b-form-input id="project-name-input" v-model="newProjectData.name"></b-form-input>
+          <b-form-input id="project-name-input" v-model="newProjectData.name" :state="nameInputState" @update="nameInput"></b-form-input>
         </b-form-group>
         <b-form-group
           label="Image URL: "
           label-for="project-image-url-input"
           label-cols-sm="3"
           label-align-sm="right"
+          v-show="false"
         >
           <b-form-input id="image-url-input" v-model="newProjectData.imgUrl" type="url"></b-form-input>
         </b-form-group>
@@ -70,6 +71,7 @@ export default {
     return {
       cards: [
       ],
+      nameInputState: false,
       newProjectData: {
         name: '',
         imgUrl: '',
@@ -82,7 +84,12 @@ export default {
     }
   },
   methods: {
+    nameInput () {
+      this.nameInputState = this.newProjectData.name !== ''
+      this.changeOkDisabled()
+    },
     setDefaultProjectData () {
+      this.nameInputState = false
       this.newProjectData = {
         name: '',
         imgUrl: '',
@@ -139,7 +146,7 @@ export default {
       let invalid = this.newProjectData.repositories.some((r) => {
         return !r.state
       })
-      this.addProjectOkDisabled = invalid
+      this.addProjectOkDisabled = invalid || !this.nameInputState
     }
   },
   created () {

@@ -10,7 +10,7 @@
                 {{ this.profileData.name }}
               </b-td>
             </b-tr>
-            <b-tr>
+            <b-tr v-show="false">
               <b-th class="text-right" colspan="1">Image URL: </b-th>
               <b-td class="text-left" colspan="5">
                 {{ this.profileData.imgUrl }}
