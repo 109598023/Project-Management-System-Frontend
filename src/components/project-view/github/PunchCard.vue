@@ -62,13 +62,29 @@ export default {
         }
       })
     })
-    this.$api.view.queryPunchCard({}).then((response) => {
-      const data = response.data
-      data.forEach((dataItem) => {
-        console.log(dataItem)
-        this.echartsOptions.series[dataItem[0]].data.push([dataItem[1], dataItem[2]])
+    this.queryPunchCard()
+  },
+  methods: {
+    async queryPunchCard () {
+      this.echartsOptions.series.forEach((element) => {
+        element.data.length = 0
       })
-    })
+      this.$api.view.queryPunchCard({
+        id: this.$route.params.id,
+        repositoryId: this.$route.params.rid,
+        username: this.$store.state.auth.username
+      }).then((response) => {
+        const data = response.data
+        data.forEach((dataItem) => {
+          this.echartsOptions.series[dataItem[0]].data.push([dataItem[1], dataItem[2]])
+        })
+      })
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      this.queryPunchCard()
+    }
   }
 }
 </script>

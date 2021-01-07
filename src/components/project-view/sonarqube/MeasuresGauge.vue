@@ -71,12 +71,10 @@ export default {
     }
   },
   created () {
-    console.log(this.seriesData)
     this.echartsOptions.series[0].data = this.seriesData
   },
   watch: {
     seriesData: function () {
-      console.log(this.seriesData)
       this.echartsOptions.series[0].data = this.seriesData
     }
   }

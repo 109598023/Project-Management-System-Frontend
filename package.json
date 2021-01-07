@@ -25,6 +25,7 @@
     "echarts": "^5.0.0",
     "echarts-gl": "^1.1.1",
     "element-ui": "^2.14.1",
+    "stompjs": "^2.3.3",
     "v-calendar": "^2.1.1",
     "vue": "^2.5.2",
     "vue-echarts": "^5.0.0-beta.0",

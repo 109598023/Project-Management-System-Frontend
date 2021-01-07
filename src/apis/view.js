@@ -7,6 +7,12 @@ const view = {
   contributorsTotal (params) {
     return req('post', '/project_view/github/contributors_total', params)
   },
+  queryPunchCard (params) {
+    return req('post', '/project_view/github/punch_card', params)
+  },
+  queryIssue (params) {
+    return req('post', '/project_view/github/issue', params)
+  },
   addProject (params) {
     return req('post', '/project_view/add_project', params)
   },
@@ -31,11 +37,8 @@ const view = {
   queryMeasures (params) {
     return req('post', '/project_view/sonar_qube/query_measures', params)
   },
-  queryPunchCard (params) {
-    return req('post', '/project_view/github/punch_card', params)
-  },
-  queryIssue (params) {
-    return req('post', '/project_view/github/Issue', params)
+  validateProjectUrl (params) {
+    return req('post', '/project_view/validate_project_url', params)
   }
 }
 
